@@ -101,6 +101,10 @@ module Artsy
   
   
   class Artist < Artsy::Model
+    def label
+      name
+    end
+    
     def birth_year
       @birth_year ||= years_list[0].presence.try(:to_i)
     end
@@ -161,6 +165,10 @@ module Artsy
   
   
   class Artwork < Artsy::Model
+    def label
+      title
+    end
+    
     def description
       [medium, manufacturer, dimensions_string].compact.join('<br />')
     end
@@ -248,6 +256,10 @@ module Artsy
   end
   
   class Gene < Artsy::Model
+    def label
+      name
+    end
+    
     def artworks_with_dates
       @artworks_with_dates ||= artworks.select(&:valid_for_timeline?)
     end
@@ -287,6 +299,10 @@ module Artsy
   end
   
   class Tag < Artsy::Model
+    def label
+      name
+    end
+    
     def valid_for_timeline?
       artworks_with_dates.any?
     end

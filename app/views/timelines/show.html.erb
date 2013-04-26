@@ -16,7 +16,7 @@
 <% end %>
 
 <div id="timelines_show_page">
-  <%= render partial: 'search_form' %>
+  <%= render partial: 'search_form', locals: {value: @object.label} %>
   
   <div id="timeline"></div>
 </div>
