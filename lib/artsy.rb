@@ -3,11 +3,13 @@ module Artsy
   class Client
     attr_accessor :xapp_token, :base_url
   
-    DEFAULT_BASE_URL = "https://staging-secure.artsy.net/api/v1/"
+    DEFAULT_BASE_API_URL = "https://staging-secure.artsy.net/api/v1/"
+    DEFAULT_ARTSY_BASE_URL = "http://artsy.net"
+    ARTSY_LINK_RE = /(\[[^\]]*?\])\((\/(?:(?!artist|artwork|gene|tag)).+?)\)/
   
     def initialize(options = {})
       self.xapp_token = options[:xapp_token] || raise("xapp_token required!")
-      self.base_url = options[:base_url] || DEFAULT_BASE_URL
+      self.base_url = options[:base_url] || DEFAULT_BASE_API_URL
     end
     
     def find_artist(slug)
@@ -61,6 +63,10 @@ module Artsy
     
     def markdown
       @markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, space_after_headers: true, hard_wrap: true)
+    end
+    
+    def render_markdown_with_artsy_urls(text, base_host = DEFAULT_ARTSY_BASE_URL)
+      markdown.render(text).gsub(ARTSY_LINK_RE, '\1(' + base_host + '\2)')
     end
     
     private
@@ -125,7 +131,7 @@ module Artsy
         timeline: {
           headline: headline,
           type: "default",
-          text: client.markdown.render(blurb),
+          text: client.render_markdown_with_artsy_urls(blurb),
           asset: {
             media: image_version_url(fields, 'square')
           },
@@ -161,7 +167,7 @@ module Artsy
     end
     
     def description_html
-      @description_html ||= client.markdown.render(description)
+      @description_html ||= client.render_markdown_with_artsy_urls(description)
     end
     
     def dimensions_string
@@ -251,7 +257,7 @@ module Artsy
         timeline: {
           headline: name,
           type: "default",
-          text: client.markdown.render(description),
+          text: client.render_markdown_with_artsy_urls(description),
           asset: {
             media: image_version_url(fields, 'square')
           },

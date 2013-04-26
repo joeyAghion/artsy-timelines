@@ -3,13 +3,16 @@ TO DO
 
 √ gene: related artists
 √ gene: related artworks
+√ tag: related artworks (filter)
+
+√ artwork: start at slide representing chosen work
+
 * gene: related genes
 * gene: sort by gene value, then iconicity
 
 * gene: link to related genes in gene card
 * gene: link to related genes' timelines
 
-√ tag: related artworks (filter)
 * tag: related genes in tag card
 * tag: if no artworks with dates, link to related genes' timelines
 
