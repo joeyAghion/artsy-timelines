@@ -41,4 +41,6 @@ body #timelines_index_page .search_area {
   margin-top: 10%;
 }
 
-
+.slider-item .text ul li {
+  font-size: 0.85em;
+}

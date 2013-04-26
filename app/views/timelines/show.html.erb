@@ -8,9 +8,9 @@
     hash_bookmark: true
   });
   $(window).bind('LOADED', function(e, data) {
-    if (!window.timelineLoaded && (selectedItem = $('.slider-item.selected-item')).length && (selectedIndex = $('.slider-item').index(selectedItem)).length && $('.flag').length) {
+    if (!window.timelineLoaded && (selectedItem = $('.slider-item.selected-item')).length && (selectedIndex = $('.slider-item').index(selectedItem)) >= 0 && $('.flag').length) {
       window.timelineLoaded = true;
-      $(".flag:nth(" + selectedIndex + ")").trigger('click', {number: 12});
+      $(".flag:nth(" + selectedIndex + ")").trigger('click', {number: selectedIndex});
     }
   });
 <% end %>

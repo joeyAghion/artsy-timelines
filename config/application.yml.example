@@ -1,0 +1,6 @@
+---
+ARTSY_APP_ID: xxxxxxxxxxxxxxxxxxxx
+ARTSY_APP_SECRET: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ARTSY_XAPP_TOKEN: "xxxxxxx"
+DEFAULT_BASE_API_URL: "https://staging-secure.artsy.net/api/v1/"
+DEFAULT_BASE_URL: "http://artsy.net"

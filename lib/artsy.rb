@@ -1,15 +1,14 @@
 module Artsy
   
   class Client
-    attr_accessor :xapp_token, :base_url
+    attr_accessor :xapp_token, :base_api_url, :base_url
   
-    DEFAULT_BASE_API_URL = "https://staging-secure.artsy.net/api/v1/"
-    DEFAULT_ARTSY_BASE_URL = "http://artsy.net"
     ARTSY_LINK_RE = /(\[[^\]]*?\])\((\/(?:(?!artist|artwork|gene|tag)).+?)\)/
   
     def initialize(options = {})
       self.xapp_token = options[:xapp_token] || raise("xapp_token required!")
-      self.base_url = options[:base_url] || DEFAULT_BASE_API_URL
+      self.base_api_url = options[:base_api_url] || Figaro.env.default_base_api_url
+      self.base_url = options[:base_url] || Figaro.env.default_base_url
     end
     
     def find_artist(slug)
@@ -58,21 +57,21 @@ module Artsy
     end
     
     def match_url
-      "#{base_url}match?visible_to_public=true"
+      "#{base_api_url}match?visible_to_public=true"
     end
     
     def markdown
       @markdown ||= Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, space_after_headers: true, hard_wrap: true)
     end
     
-    def render_markdown_with_artsy_urls(text, base_host = DEFAULT_ARTSY_BASE_URL)
-      markdown.render(text).gsub(ARTSY_LINK_RE, '\1(' + base_host + '\2)')
+    def render_markdown_with_artsy_urls(text, link_base = base_url)
+      markdown.render(text).gsub(ARTSY_LINK_RE, '\1(' + link_base + '\2)')
     end
     
     private
     
     def get(path)
-      RestClient.get(base_url + path, "X-Xapp-Token" => xapp_token)
+      RestClient.get(base_api_url + path, "X-Xapp-Token" => xapp_token)
     end
   end
   
@@ -135,7 +134,7 @@ module Artsy
           asset: {
             media: image_version_url(fields, 'square')
           },
-          date: artworks_with_dates.map{ |a| a.to_timeline_date(headline: ->(a) { a.title }) },
+          date: artworks_with_dates.map{ |a| a.to_timeline_date(headline: ->(a) { a.title }, text: ->(a) { "<p>#{a.description_html}</p>" }) },
           era: [ to_timeline_era ]
         }
       }
@@ -204,7 +203,7 @@ module Artsy
         timeline: {
           headline: fields['display'],
           type: "default",
-          text: description_html,
+          text: text,
           asset: {
             media: image_version_url(default_image, 'large')
           },
@@ -219,7 +218,7 @@ module Artsy
         startDate: [year].compact.join(","),
         endDate: [year].compact.join(","),
         headline: options[:headline].try(:call, self) || fields['display'],
-        text: "<p>#{description}</p>",
+        text: options[:text].try(:call, self) || text,
         classname: options[:classname],
         asset: {
           media: large_image,
@@ -236,6 +235,15 @@ module Artsy
     
     def related_artworks
       @related_artworks ||= client.find_related_artworks_for_artwork(id)
+    end
+    
+    def text
+      "<p>#{description_html}</p><p>#{artist_link}</p>"
+    end
+    
+    def artist_link
+      return nil unless artist
+      "<ul><li><a href='/artist/#{artist.id}'>Artist Timeline</a></li></ul>"
     end
   end
   
