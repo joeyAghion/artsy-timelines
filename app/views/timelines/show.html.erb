@@ -1,0 +1,21 @@
+<% content_for :document_ready do %>
+  window.timeline = createStoryJS({
+    type: 'timeline',
+    width: '100%',
+    height: 650,
+    source: window.timelineData,
+    embed_id: 'timeline'
+  });
+<% end %>
+
+<div id="timelines_show_page">
+  <%= render partial: 'search_form' %>
+  
+  <div id="timeline"></div>
+</div>
+
+<script type="text/javascript" src="/js/storyjs-embed.js"></script>
+
+<script type="text/javascript">
+  window.timelineData = <%=raw @object.to_timeline.to_json %>;
+</script>

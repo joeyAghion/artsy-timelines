@@ -1,0 +1,44 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+body {
+  font-size: 25px;
+}
+#flash_error {
+  color: #c73030;
+  padding: 20px;
+  margin: auto;
+  text-align: center;
+}
+body .search_area {
+  width: 600px;
+  margin: 25px auto;
+  font-family: "Georgia",Times New Roman,Times,serif;
+  font-size: 30px;
+}
+body .search_area label {
+  padding-right: 15px;
+}
+body .ui-widget input {
+  font-family: "Georgia",Times New Roman,Times,serif;
+  width: 450px;
+  padding: 10px;
+}
+
+/* timelines/index */
+body #timelines_index_page .search_area {
+  margin-top: 10%;
+}
+
+

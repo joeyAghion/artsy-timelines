@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Timelines</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      window.Artsy = {
+        matchUrl: <%=raw artsy.match_url.to_json %>,
+        xappToken: <%=raw artsy.xapp_token.to_json %>
+      };
+      
+      $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader("X-XAPP-TOKEN", Artsy.xappToken);
+      });
+      
+      <%= yield :document_ready %>
+    });
+  </script>
+</head>
+<body>
+
+  <div id="container">
+    <% flash.each do |name, msg| %>
+      <% if msg.is_a?(String) %>
+        <%= content_tag :div, msg, id: "flash_#{name}", class: "flash" %>
+      <% end %>
+    <% end %>
+    
+    <%= yield %>
+  </div>
+
+</body>
+</html>

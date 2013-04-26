@@ -1,0 +1,39 @@
+<% content_for :document_ready do %>
+  $(function() {
+    var cache = {};
+    $( "#search" ).autocomplete({
+      minLength: 2,
+      autoFocus: true,
+      source: function( request, response ) {
+        var term = request.term;
+        if ( term in cache ) {
+          response( cache[ term ] );
+          return;
+        }
+
+        $.getJSON( Artsy.matchUrl, request, function( data, status, xhr ) {
+          data = data.map(function(r) {
+            return {
+              value: "/" + [r.model, r.id].join("/"),
+              label: r.display + " (" + r.label + ")"
+            };
+          });
+          cache[ term ] = data
+          response( data );
+        });
+      },
+      select: function( event, ui ) {
+        location.href = ui.item.value;
+        event.preventDefault();
+      },
+      focus: function( event, ui ) {
+        event.preventDefault();
+      }
+    });
+  });
+<% end %>
+
+<div class="ui-widget search_area">
+  <label for="search">Search:</label>
+  <input id="search" placeholder="Artist, artwork, tag or gene" />
+</div>
