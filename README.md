@@ -17,6 +17,8 @@ TO DO
 * ~~gene: related artworks~~
 * ~~tag: related artworks (filter)~~
 * ~~artwork: start at slide representing chosen work~~
+* ~~Add analytics~~
+* ~~Track pan/zoom events~~
 * gene: related genes
 * gene: sort by gene value, then iconicity
 * gene: link to related genes in gene card
