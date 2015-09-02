@@ -86,6 +86,7 @@ module Artsy
     
     def image_version_url(image, version, options = {})
       return nil unless options[:ignore_versions] || (image && image['image_versions'] && image['image_versions'].include?(version))
+      return nil unless image['image_url'].present?
       image['image_url'].gsub(/:version/, version.to_s).gsub(/stagic/, 'static')
     end
     

@@ -27,6 +27,7 @@ group :development do
   gem 'heroku'
   gem 'sqlite3'
   gem "debugger"
+  gem 'pry-debugger'
 end
 
 group :production do
